@@ -1,0 +1,22 @@
+{
+  "name": "vite-lit-example",
+  "version": "0.0.0",
+  "devDependencies": {
+    "@lit-labs/ssr": "^3.3.1",
+    "globby": "^14.1.0",
+    "lit": "^3.2.1",
+    "prettier": "3.5.3",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
+  },
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "build:debug": "tsc --sourceMap && node --inspect-brk ./node_modules/.bin/vite build",
+    "preview": "vite preview",
+    "ncu": "bunx npm-check-updates --packageManager bun -u",
+    "format": "bunx prettier --write ."
+  },
+  "type": "module"
+}

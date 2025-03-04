@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + Lit + TS</title>
+  </head>
+
+  <body>
+    <div id="app"></div>
+    <script>
+      const routes = window.__ROUTES__;
+
+      function handleRoute(path) {
+        const matchedRoute = routes.find((route) => {
+          const pathRegex = new RegExp(
+            `^${route.path.replace(/:\w+/g, "(\\w+)")}$`,
+          );
+          return pathRegex.test(path);
+        });
+
+        if (matchedRoute) {
+          import(matchedRoute.component).then((module) => {
+            const element = document.createElement(
+              matchedRoute.component.replace(/\//g, "-").replace(".ts", ""),
+            );
+            document.getElementById("app").innerHTML = "";
+            document.getElementById("app").appendChild(element);
+          });
+        }
+      }
+
+      window.addEventListener("popstate", () =>
+        handleRoute(window.location.pathname),
+      );
+      handleRoute(window.location.pathname);
+    </script>
+  </body>
+</html>
