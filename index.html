@@ -7,34 +7,32 @@
     <title>Vite + Lit + TS</title>
   </head>
 
-  <body>
-    <div id="app"></div>
-    <script>
-      const routes = window.__ROUTES__;
+  <body data-bs-theme="dark">
+    <main id="app" class="container"></main>
 
-      function handleRoute(path) {
-        const matchedRoute = routes.find((route) => {
-          const pathRegex = new RegExp(
-            `^${route.path.replace(/:\w+/g, "(\\w+)")}$`,
-          );
-          return pathRegex.test(path);
-        });
+    <script type="module">
+      import style from "@/style.scss?inline";
+      const bootstrapStyleSheet = new CSSStyleSheet();
+      bootstrapStyleSheet.replaceSync(style);
+      document.adoptedStyleSheets = [
+        ...document.adoptedStyleSheets,
+        bootstrapStyleSheet,
+      ];
 
-        if (matchedRoute) {
-          import(matchedRoute.component).then((module) => {
-            const element = document.createElement(
-              matchedRoute.component.replace(/\//g, "-").replace(".ts", ""),
-            );
-            document.getElementById("app").innerHTML = "";
-            document.getElementById("app").appendChild(element);
-          });
-        }
-      }
-
-      window.addEventListener("popstate", () =>
-        handleRoute(window.location.pathname),
-      );
-      handleRoute(window.location.pathname);
+      import { Router } from "@vaadin/router";
+      const router = new Router(document.getElementById("app"));
+      router.setRoutes([
+        {
+          path: "/",
+          component: "home-page",
+          action: async () => await import("@routes/+page.ts"),
+        },
+        {
+          path: "/about",
+          component: "about-page",
+          action: async () => await import("@routes/about/+page.ts"),
+        },
+      ]);
     </script>
   </body>
 </html>
